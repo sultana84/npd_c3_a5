@@ -1,11 +1,8 @@
-from flask import Flask
+from flask import Flask, request
 from json import dumps, loads
 from exercise4 import find_object, update_object 
 
 app = Flask(__name__)
-
-client = MongoClient()
-my_collection = client.my_database.my_collection
 
 @app.route('/<oid>', methods=['GET'])
 def findobject(oid):
@@ -14,15 +11,16 @@ def findobject(oid):
 
 @app.route('/<oid>', methods=['POST', 'PUT'])
 def updateObject(oid):
-  obj = loads(request.get_data(),)
-  update_object = obj['I got a post request!']
+  obj = loads(request.get_data())
+  obj['name'] = oid
+  update_object(obj)
   print 'I got a post request!'
   return ""
 
 if __name__ == '__main__':
+   app.testing = True
    with app.test_client() as c:
-     get_resp = c.get('/blah')
-     print 'get status: %s' % get_resp.status
-     print 'get response: %' % get_resp.get_data()
-     post_resp = c.post('/blah')
-
+     post_resp = c.post('/name', data=dumps({'whatever': 'youwant'}))
+     get_resp = c.get('/name')
+     print 'status: %s' % post_resp.status
+     print 'response: %s' % get_resp.get_data()

@@ -9,7 +9,7 @@ def find_object(my_key):
     """Finds and returns an object matching the primary key.
        Returns none if not found.
     """
-    my_object =  my_collection.find_one({'name': my_key})
+    my_object =  my_collection.find_one({'name': my_key}, {'_id': 0})
     return my_object
 
 
